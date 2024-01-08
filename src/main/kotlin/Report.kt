@@ -14,14 +14,14 @@ class Report {
     private data class MeasurementKey(
         val archiverName: String,
         val payloadName: String,
-        val compressionLevel: CompressionLevel
+        val specificCompressionLevel: SpecificCompressionLevel
     ) : Comparable<MeasurementKey> {
         override fun compareTo(other: MeasurementKey) = compareValuesBy(
             this,
             other,
             MeasurementKey::payloadName,
             MeasurementKey::archiverName,
-            MeasurementKey::compressionLevel
+            MeasurementKey::specificCompressionLevel
         )
     }
 
@@ -36,7 +36,7 @@ class Report {
     fun report(
         archiver: Archiver,
         originalPayload: Payload,
-        compressionLevel: CompressionLevel,
+        specificCompressionLevel: SpecificCompressionLevel,
         compressionRatio: CompressionRatio,
         compressionDuration: Duration,
         uncompressionDuration: Duration,
@@ -44,7 +44,7 @@ class Report {
         val key = MeasurementKey(
             archiverName = archiver.name,
             payloadName = originalPayload.name,
-            compressionLevel = compressionLevel
+            specificCompressionLevel = specificCompressionLevel
         )
 
         val value = MeasurementValue(
@@ -84,7 +84,7 @@ class Report {
                 key.payloadName,
                 ensureEqualAndTakeFirst(values) { it.compressionRatio.uncompressed }.toString(),
                 key.archiverName,
-                key.compressionLevel.toString(),
+                key.specificCompressionLevel.toString(),
                 ensureEqualAndTakeFirst(values) { it.compressionRatio.ratioAsText },
                 ensureEqualAndTakeFirst(values) { it.compressionRatio.spaceSavingAsText },
                 avgCompressionDuration.toFormattedString(),

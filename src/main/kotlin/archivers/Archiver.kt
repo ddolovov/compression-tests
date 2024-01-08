@@ -19,7 +19,9 @@ sealed class Archiver(val name: String, requiredTools: List<Tool>) {
 
     val state: State by lazy { computeStatus(requiredTools) }
 
-    abstract fun compress(compressionLevel: CompressionLevel, uncompressed: Payload, targetDirectory: File): Payload
+    abstract fun computeSpecificCompressionLevel(genericCompressionLevel: GenericCompressionLevel): SpecificCompressionLevel
+
+    abstract fun compress(compressionLevel: SpecificCompressionLevel, uncompressed: Payload, targetDirectory: File): Payload
     abstract fun uncompress(compressed: Payload, targetDirectory: File): Payload
 
     protected fun Payload.toCompressedPayload(tool: Tool, targetDirectory: File): Payload {

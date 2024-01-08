@@ -8,12 +8,15 @@ import java.io.File
 
 @Suppress("unused")
 data object Zip : Archiver("zip", ZIP, UNZIP) {
-    override fun compress(compressionLevel: CompressionLevel, uncompressed: Payload, targetDirectory: File): Payload {
+    override fun computeSpecificCompressionLevel(genericCompressionLevel: GenericCompressionLevel) =
+        SpecificCompressionLevel.Default(genericCompressionLevel)
+
+    override fun compress(compressionLevel: SpecificCompressionLevel, uncompressed: Payload, targetDirectory: File): Payload {
         val zipTool = state.getTool(ZIP)
         val compressed = uncompressed.toCompressedPayload(ZIP, targetDirectory)
 
         CliCommandRunner(workDir = uncompressed.path.parentFile, timeoutSeconds = 10)
-            .runCommand(zipTool, "-r", compressed.path, "-${compressionLevel.rawLevel}", uncompressed.name)
+            .runCommand(zipTool, "-r", compressed.path, compressionLevel.cliKey, uncompressed.name)
             .ensureSuccess()
 
         return compressed

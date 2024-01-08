@@ -1,7 +1,6 @@
 package ddol.compression.tests
 
 import ddol.compression.tests.archivers.Archiver
-import ddol.compression.tests.archivers.Zip
 import java.io.File
 import kotlin.time.measureTimedValue
 
@@ -18,15 +17,14 @@ fun main() {
             if (archiver.state is Archiver.State.Unavailable) return@archiver
 
             Environment.payloads.forEach payload@{ originalPayload ->
-                CompressionLevel.entries.forEach compressionLevel@{ compressionLevel ->
-                    if (!compressionLevel.isMeasured) return@compressionLevel
-
+                GenericCompressionLevel.entries.forEach { genericCompressionLevel ->
                     println()
-                    println("${archiver.name}, compression $compressionLevel, payload '${originalPayload.path.name}'")
+                    println("${archiver.name}, compression $genericCompressionLevel, payload '${originalPayload.path.name}'")
 
+                    val specificCompressionLevel = archiver.computeSpecificCompressionLevel(genericCompressionLevel)
                     val compressedPayloadDir = prepareCompressedPayloadDir()
                     val (compressedPayload, compressionDuration) = measureTimedValue {
-                        archiver.compress(compressionLevel, originalPayload, compressedPayloadDir)
+                        archiver.compress(specificCompressionLevel, originalPayload, compressedPayloadDir)
                     }
                     val compressionRatio = CompressionRatio(originalPayload.size, compressedPayload.size)
 
@@ -50,7 +48,7 @@ fun main() {
                     report.report(
                         archiver = archiver,
                         originalPayload = originalPayload,
-                        compressionLevel = compressionLevel,
+                        specificCompressionLevel = specificCompressionLevel,
                         compressionRatio = compressionRatio,
                         compressionDuration = compressionDuration,
                         uncompressionDuration = uncompressionDuration

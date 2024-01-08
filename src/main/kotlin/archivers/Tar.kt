@@ -1,13 +1,13 @@
 package ddol.compression.tests.archivers
 
-import ddol.compression.tests.CompressionLevel
+import ddol.compression.tests.SpecificCompressionLevel
 import ddol.compression.tests.Payload
 import ddol.compression.tests.cli.CliCommandRunner
 import ddol.compression.tests.cli.Tool
 import java.io.File
 
 sealed class Tar(name: String, vararg requiredTools: Tool): Archiver(name, listOf(Tool.TAR) + requiredTools) {
-    override fun compress(compressionLevel: CompressionLevel, uncompressed: Payload, targetDirectory: File): Payload {
+    override fun compress(compressionLevel: SpecificCompressionLevel, uncompressed: Payload, targetDirectory: File): Payload {
         val tarTool = state.getTool(Tool.TAR)
         val merged = uncompressed.toCompressedPayload(Tool.TAR, targetDirectory)
 

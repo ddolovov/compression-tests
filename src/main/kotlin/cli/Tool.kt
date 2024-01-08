@@ -12,7 +12,10 @@ enum class Tool(val alias: String, val fileExtension: String) {
     BUNZIP2("bunzip2", "bz2"),
     XZ("xz", "xz"),
     UNXZ("unxz", "xz"),
-    SEVEN_ZIP("7z", "7z");
+    SEVEN_ZIP("7z", "7z"),
+    ZSTD("zstd", "zst"),
+    UNZSTD("unzstd", "zst"),
+    ;
 
     fun locate(): File? {
         val result = CliCommandRunner(timeoutSeconds = null).runCommand("which", alias)
