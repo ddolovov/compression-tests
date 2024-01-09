@@ -10,16 +10,14 @@ fun main() {
 
     val report = Report()
 
-    for (round in 1 .. Environment.rounds) {
-        println()
-        println("=== Round $round of ${Environment.rounds} ===")
+    Environment.payloads.forEach { originalPayload ->
         Archiver.all.forEach archiver@{ archiver ->
             if (archiver.state is Archiver.State.Unavailable) return@archiver
 
-            Environment.payloads.forEach payload@{ originalPayload ->
-                GenericCompressionLevel.entries.forEach { genericCompressionLevel ->
+            GenericCompressionLevel.entries.forEach { genericCompressionLevel ->
+                for (round in 1..Environment.rounds) {
                     println()
-                    println("${archiver.name}, compression $genericCompressionLevel, payload '${originalPayload.path.name}'")
+                    println("=== ${archiver.name}, compression $genericCompressionLevel, payload '${originalPayload.path.name}', round $round of ${Environment.rounds} ===")
 
                     val specificCompressionLevel = archiver.computeSpecificCompressionLevel(genericCompressionLevel)
                     val compressedPayloadDir = prepareCompressedPayloadDir()
