@@ -19,7 +19,8 @@ sealed class Archiver(val name: String, requiredTools: List<Tool>) {
 
     val state: State by lazy { computeStatus(requiredTools) }
 
-    abstract fun computeSpecificCompressionLevel(genericCompressionLevel: GenericCompressionLevel): SpecificCompressionLevel
+    open fun computeSpecificCompressionLevel(genericCompressionLevel: GenericCompressionLevel): SpecificCompressionLevel =
+        SpecificCompressionLevel.Default(genericCompressionLevel)
 
     abstract fun compress(compressionLevel: SpecificCompressionLevel, uncompressed: Payload, targetDirectory: File): Payload
     abstract fun uncompress(compressed: Payload, targetDirectory: File): Payload
@@ -62,8 +63,6 @@ sealed class Archiver(val name: String, requiredTools: List<Tool>) {
         }
 
         private fun computeStatus(requiredTools: List<Tool>) : State {
-            check(requiredTools.isNotEmpty())
-
             val tools = mutableMapOf<Tool, File>()
             val missingTools = mutableListOf<Tool>()
 

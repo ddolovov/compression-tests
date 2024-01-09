@@ -7,9 +7,6 @@ import java.io.File
 
 @Suppress("unused")
 data object TarGzip : Tar("tar + gzip", GZIP, GUNZIP) {
-    override fun computeSpecificCompressionLevel(genericCompressionLevel: GenericCompressionLevel) =
-        SpecificCompressionLevel.Default(genericCompressionLevel)
-
     override fun compress(compressionLevel: SpecificCompressionLevel, uncompressed: Payload, targetDirectory: File): Payload {
         @Suppress("NAME_SHADOWING") val uncompressed = super.compress(compressionLevel, uncompressed, targetDirectory)
         val gzipTool = state.getTool(GZIP)

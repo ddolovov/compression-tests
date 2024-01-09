@@ -8,9 +8,6 @@ import java.io.File
 
 @Suppress("unused")
 data object Zip : Archiver("zip", ZIP, UNZIP) {
-    override fun computeSpecificCompressionLevel(genericCompressionLevel: GenericCompressionLevel) =
-        SpecificCompressionLevel.Default(genericCompressionLevel)
-
     override fun compress(compressionLevel: SpecificCompressionLevel, uncompressed: Payload, targetDirectory: File): Payload {
         val zipTool = state.getTool(ZIP)
         val compressed = uncompressed.toCompressedPayload(ZIP, targetDirectory)

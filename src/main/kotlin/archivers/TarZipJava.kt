@@ -5,14 +5,14 @@ import ddol.compression.tests.cli.Tool.*
 import java.io.File
 
 @Suppress("unused")
-data object TarZip : Tar("tar + zip", ZIP, UNZIP) {
+data object TarZipJava : Tar("tar + zip(java)", ZIP, UNZIP) {
     override fun compress(compressionLevel: SpecificCompressionLevel, uncompressed: Payload, targetDirectory: File) =
-        Zip.compress(
+        ZipJava.compress(
             compressionLevel,
             super.compress(compressionLevel, uncompressed, targetDirectory),
             targetDirectory
         )
 
     override fun uncompress(compressed: Payload, targetDirectory: File) =
-        super.uncompress(Zip.uncompress(compressed, targetDirectory), targetDirectory)
+        super.uncompress(ZipJava.uncompress(compressed, targetDirectory), targetDirectory)
 }
