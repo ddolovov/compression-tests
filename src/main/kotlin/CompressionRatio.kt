@@ -13,7 +13,7 @@ class CompressionRatio(val uncompressed: Size, val compressed: Size) {
 
     val spaceSaving: Double? = ratio?.let { 1.0 - 1.0 / it }
 
-    val ratioAsText: String = ratio?.let { "${RATIO_FORMATTER.format(it)}:1" } ?: "?"
+    val ratioAsText: String = ratio?.let<Double, String?>(RATIO_FORMATTER::format) ?: "?"
     val spaceSavingAsText: String = spaceSaving?.let { "${(it * 100).toULong()}%" } ?: "?"
 
     companion object {
