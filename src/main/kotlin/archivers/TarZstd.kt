@@ -13,14 +13,15 @@ data object TarZstd : Tar("tar + zstd", ZSTD, UNZSTD) {
     override fun computeSpecificCompressionLevel(genericCompressionLevel: GenericCompressionLevel) =
         object : SpecificCompressionLevel() {
             override val genericCompressionLevel get() = genericCompressionLevel
-            override val cliKey
-                get() = "-" + when (genericCompressionLevel) {
-                    GenericCompressionLevel.LOW -> 1
-                    GenericCompressionLevel.LOW_TO_MEDIUM -> 6
-                    GenericCompressionLevel.MEDIUM -> 11
-                    GenericCompressionLevel.MEDIUM_TO_HIGH -> 16
-                    GenericCompressionLevel.HIGH -> 22
+            override val value
+                get() = when (genericCompressionLevel) {
+                    GenericCompressionLevel.LOW -> 1u
+                    GenericCompressionLevel.LOW_TO_MEDIUM -> 6u
+                    GenericCompressionLevel.MEDIUM -> 11u
+                    GenericCompressionLevel.MEDIUM_TO_HIGH -> 16u
+                    GenericCompressionLevel.HIGH -> 22u
                 }
+            override val cliKey get() = "-$value"
         }
 
     override fun compress(compressionLevel: SpecificCompressionLevel, uncompressed: Payload, targetDirectory: File): Payload {

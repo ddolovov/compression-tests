@@ -12,12 +12,17 @@ enum class GenericCompressionLevel(val rawValue: UInt) {
 
 abstract class SpecificCompressionLevel : Comparable<SpecificCompressionLevel> {
     abstract val genericCompressionLevel: GenericCompressionLevel
+    abstract val value: UInt
     abstract val cliKey: String
 
     final override fun equals(other: Any?) =
-        other is SpecificCompressionLevel && genericCompressionLevel == other.genericCompressionLevel && cliKey == other.cliKey
+        other is SpecificCompressionLevel
+                && genericCompressionLevel == other.genericCompressionLevel
+                && value == other.value
+                && cliKey == other.cliKey
 
-    final override fun hashCode() = genericCompressionLevel.hashCode() + 31 * cliKey.hashCode()
+    final override fun hashCode() =
+        ((genericCompressionLevel.hashCode() * 31) + value.hashCode()) * 31 + cliKey.hashCode()
 
     final override fun toString() = cliKey
 
@@ -28,6 +33,7 @@ abstract class SpecificCompressionLevel : Comparable<SpecificCompressionLevel> {
         override val genericCompressionLevel: GenericCompressionLevel,
         private val prefix: String = "-"
     ) : SpecificCompressionLevel() {
+        override val value get() = genericCompressionLevel.rawValue * 2u - 1u
         override val cliKey get() = "$prefix${genericCompressionLevel.rawValue * 2u - 1u}"
     }
 }

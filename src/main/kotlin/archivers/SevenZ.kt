@@ -8,7 +8,7 @@ import ddol.compression.tests.cli.Tool.SEVEN_ZIP
 import java.io.File
 
 @Suppress("unused")
-data object SevenZip : Archiver("7z", SEVEN_ZIP) {
+data object SevenZ : Archiver("7z", SEVEN_ZIP) {
     override fun computeSpecificCompressionLevel(genericCompressionLevel: GenericCompressionLevel) =
         SpecificCompressionLevel.Default(genericCompressionLevel, "-mx")
 

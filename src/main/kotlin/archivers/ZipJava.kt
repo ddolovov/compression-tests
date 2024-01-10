@@ -12,13 +12,13 @@ import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
 @Suppress("unused")
-data object ZipJava : Archiver("zip (java)") {
+data object ZipJava : Archiver("zip(java)") {
     override fun compress(compressionLevel: SpecificCompressionLevel, uncompressed: Payload, targetDirectory: File): Payload {
         val compressed = uncompressed.toCompressedPayload(ZIP, targetDirectory)
 
         FileOutputStream(compressed.path).use { fos ->
             ZipOutputStream(fos).use { zos ->
-                zos.setLevel(compressionLevel.cliKey.substringAfter('-').toInt())
+                zos.setLevel(compressionLevel.value.toInt())
 
                 uncompressed.path.walkTopDown().forEach { file ->
                     val relativePath = file.relativeTo(uncompressed.path.parentFile)
