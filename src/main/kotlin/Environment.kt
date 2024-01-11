@@ -9,7 +9,7 @@ object Environment {
     val outputDir: File = workDir.resolve("output").createAsEmptyDir()
 
     val reportFile: File = outputDir.resolve("report.csv")
-    val rounds: Int = 10
+    val rounds: Int = 5
 
     val payloads: List<Payload> = workDir.listFiles()
         ?.filter { it.isDirectory && it.name.startsWith("payload-") }
